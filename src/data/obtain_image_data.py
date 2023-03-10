@@ -21,8 +21,8 @@ def get_data(source):
     #     zip_ref.extractall('../data/raw')
 
     # os.remove(destination)
-    print('{} images extracted'.format(len(os.listdir('../data/raw'))))
-    print('Images copied and extracted to:','../data/raw')
+    print('{} images extracted'.format(len(os.listdir('data/raw'))))
+    print('Images copied and extracted to:','data/raw')
     print("Done!")
 
 if __name__ == '__main__':
