@@ -1,4 +1,4 @@
-import argparse, shutil, zipfile, os
+import argparse, shutil, zipfile, os, glob
 
 
 def get_data(source):
@@ -6,13 +6,20 @@ def get_data(source):
     destination = '../data/raw'
 
     print('Copying image files...')
-    shutil.copy(source, destination)
+    import glob, os, shutil
+
+    files = glob.iglob(os.path.join(source, "*).png"))
+    # print("{} images found in folder".format(len(list(files))))
+    for f in files:
+        if os.path.isfile(f):
+            shutil.copy(f, destination)
+    # shutil.copytree(source, destination)
 
     # with zipfile.ZipFile(source, 'r') as zip_ref:
     #     zip_ref.extractall('../data/raw')
 
-    os.remove(destination)
-    print('{} image folders extracted'.format(len(os.listdir('../data/raw'))))
+    # os.remove(destination)
+    print('{} images extracted'.format(len(os.listdir('../data/raw'))))
     print('Images copied and extracted to:','../data/raw')
     print("Done!")
 
