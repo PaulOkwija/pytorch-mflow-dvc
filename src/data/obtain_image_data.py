@@ -1,12 +1,12 @@
 import argparse, shutil, zipfile, os
 
 
-def get_data(*arg):
+def get_data(source):
     
     destination = '../data/raw'
 
     print('Copying image files...')
-    shutil.copy(arg, destination)
+    shutil.copy(source, destination)
 
     # with zipfile.ZipFile(source, 'r') as zip_ref:
     #     zip_ref.extractall('../data/raw')
