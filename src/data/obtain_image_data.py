@@ -3,7 +3,8 @@ import argparse, shutil, zipfile, os, glob
 
 def get_data(source):
     
-    destination = '../data/raw'
+    destination = 'data/raw'
+    os.mkdir(destination)
 
     print('Copying image files...')
     import glob, os, shutil
