@@ -1,4 +1,5 @@
 import argparse, shutil, zipfile, os, glob
+# import os
 
 
 def get_data(source):
@@ -7,7 +8,7 @@ def get_data(source):
     os.mkdir(destination)
 
     print('Copying image files...')
-    import glob, os, shutil
+    
 
     files = glob.iglob(os.path.join(source, "*).png"))
     # print("{} images found in folder".format(len(list(files))))
