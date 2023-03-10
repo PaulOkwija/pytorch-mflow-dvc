@@ -1,8 +1,8 @@
 import argparse, shutil, zipfile, os
 
 
-def get_data(args):
-    source = args.data_path
+def get_data(*args):
+    
     destination = '../data/raw'
 
     print('Copying image files...')
@@ -24,5 +24,5 @@ if __name__ == '__main__':
         required=True, help="collect data and put it in raw folder."
         )
     args = parser.parse_args()
-
-    get_data(args)
+    source = args.data_path
+    get_data(source)
