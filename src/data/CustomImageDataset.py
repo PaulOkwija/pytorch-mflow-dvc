@@ -5,18 +5,18 @@ from torchvision.io import read_image
 
 
 class CustomImageDataset(Dataset):
-    def __init__(self, annotations_file, transform=None, target_transform=None):
-        filepath_df = pd.read_csv(annotations_file)
-        self.img_labels = filepath_df['y']
-        self.img_dir = filepath_df['path']
+    def __init__(self, filepath_df, path, transform=None, target_transform=None):
+        self.img_labels = filepath_df['class']
+        self.img_name = filepath_df['images']
         self.transform = transform
+        self.path = path
         self.target_transform = target_transform
 
     def __len__(self):
         return len(self.img_labels)
 
     def __getitem__(self, idx):
-        img_path = os.path.join(self.img_dir[idx])
+        img_path = os.path.join(self.path, self.img_name[idx])
         image = read_image(img_path)
         label = self.img_labels.iloc[idx]
         if self.transform:

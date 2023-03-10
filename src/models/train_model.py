@@ -11,6 +11,8 @@ from torchmetrics.functional import accuracy
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 import mlflow 
 
+from sklearn.model_selection import train_test_split
+
 import sys
 sys.path.append('src/')
 from data.CustomImageDataset import CustomImageDataset
@@ -21,9 +23,12 @@ from utils.mlflow_run_decorator import mlflow_run
 # Define lightning dataset
 
 class LightDataset(pl.LightningDataModule):
-    def __init__(self, batch_size=16):
+    def __init__(self, batch_size=16, train, val, test):
         super().__init__()
         self.batch_size = batch_size
+        self.train = train
+        self.val = val
+        self.test = test
 
         self.train_T=T.Compose([
             T.AutoAugment(data_aug_policy),
@@ -41,21 +46,21 @@ class LightDataset(pl.LightningDataModule):
             ])
 
     def train_dataloader(self):
-        train_dataset = CustomImageDataset(annotations_file='./data/processed/train.csv', transform=self.train_T)
+        train_dataset = CustomImageDataset(self.train, transform=self.train_T)
         train_loader = DataLoader(train_dataset,
                             batch_size=self.batch_size,
                             shuffle=True, num_workers=8)
         return train_loader
     
     def val_dataloader(self):
-        val_dataset = CustomImageDataset(annotations_file='./data/processed/val.csv', transform=self.val_T)
+        val_dataset = CustomImageDataset(self.val, transform=self.val_T)
         valid_loader = DataLoader(val_dataset,
                             batch_size=self.batch_size,
                             shuffle=False, num_workers=8)       
         return valid_loader
     
-    def test_dataloader(self):
-        test_dataset = CustomImageDataset(annotations_file='./data/processed/test.csv', transform=self.val_T)
+    def test_dataloader(self, data):
+        test_dataset = CustomImageDataset(self.test, transform=self.val_T)
         test_loader = DataLoader(test_dataset,
                             batch_size=self.batch_size,
                             shuffle=False, num_workers=8)       
@@ -169,12 +174,17 @@ if __name__ == '__main__':
     image_size = (params['prepare']['image_size'], params['prepare']['image_size'])
     policies = [T.AutoAugmentPolicy.CIFAR10, T.AutoAugmentPolicy.IMAGENET, T.AutoAugmentPolicy.SVHN]
     data_aug_policy = policies[params['train']['data_aug_policy']]
+    # data_path = 
 
 
     BATCH_SIZE = params['train']['batch_size']
     LR = params['train']['learning_rate']
     label_map = yaml.safe_load(open('./data/processed/labels_map.yaml'))
     num_classes = len(label_map)
+
+    image_df = pd.read_csv('./data/external/Breast_cancer_dataset.csv')
+    train_df, val_df = train_test_split(image_df, test_size=0.33, random_state=42)
+    val_df, test_df = train_test_split(image_df, test_size=0.3, random_state=42)
 
     # Image standardization
     mean_std = yaml.safe_load(open('./data/processed/image_mean_std.yaml'))
