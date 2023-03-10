@@ -14,7 +14,7 @@ def make_csv_path(excluded_labels=None):
 
     # List all the images in raw/ 
     # list_images = glob.glob('./data/external/**/*.jpg', recursive=True)
-    df = pd.DataFrame('./data/external/Breast_cancer_dataset.csv')
+    df = pd.read_csv('./data/external/Breast_cancer_dataset.csv')
     # df['label'] = df['path'].apply(lambda x:os.path.basename(os.path.dirname(x)))
     print(df.shape)
 
@@ -40,12 +40,12 @@ def make_csv_path(excluded_labels=None):
     df['y'] = df['class'].map(labels_map)
     
     # Saving the map numbers -> label
+    os.mkdir('data/processed')
     labels_map_save = {i:label for i, label in enumerate(labels)}
     with open("./data/processed/labels_map.yaml", "w") as outfile:
         yaml.dump(labels_map_save, outfile)
 
-    # df.to_csv('./data/interim/filepath.csv', index=False)
-
+        
 if __name__ == '__main__':
     
     # Read params
