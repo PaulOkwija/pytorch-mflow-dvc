@@ -12,9 +12,9 @@ from utils.mlflow_run_decorator import mlflow_run
 @mlflow_run
 def split_dataset(annotations_file, output_folder, test_split=0.2, val_split=0.2, random_seed=99):
     dataset = pd.read_csv(annotations_file)
-    train, test = train_test_split(dataset, stratify=dataset['label'], test_size=test_split, random_state=random_seed)
+    train, test = train_test_split(dataset, stratify=dataset['class'], test_size=test_split, random_state=random_seed)
     
-    train, val = train_test_split(train, stratify=train['label'], test_size=val_split, random_state=random_seed)
+    train, val = train_test_split(train, stratify=train['class'], test_size=val_split, random_state=random_seed)
 
     print('Train set shape: {train_shape} \n Val set shape: {val_shape} \n Test set shape: {test_shape}'.format(
         train_shape=train.shape, val_shape=val.shape, test_shape=test.shape))
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     
     # Split dataset
     split_dataset(
-        annotations_file='./data/interim/filepath.csv',
+        annotations_file='./data/external/Breast_cancer_dataset.csv',
         output_folder='./data/processed',
         test_split=params['test_split'],
         val_split=params['val_split'],
