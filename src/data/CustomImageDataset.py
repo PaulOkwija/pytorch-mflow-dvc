@@ -5,8 +5,8 @@ from torchvision.io import read_image
 
 
 class CustomImageDataset(Dataset):
-    def __init__(self,path, transform=None, target_transform=None):
-        filepath_df = pd.read_csv('./data/external/Breast_cancer_dataset.csv')
+    def __init__(self,csv_path, path, transform=None, target_transform=None):
+        filepath_df = pd.read_csv(csv_path)
         self.img_labels = filepath_df['class']
         self.img_name = filepath_df['images']
         self.transform = transform
