@@ -26,5 +26,6 @@ class CustomImageDataset(Dataset):
             image = self.transform(image)
         if self.target_transform:
             label = self.target_transform(label)
-        return image, label_map[label]
+            ind = list(label_map.values()).index(label)
+        return image, list(label_map.keys())[ind]
 
