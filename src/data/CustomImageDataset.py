@@ -2,6 +2,7 @@ import os
 import pandas as pd
 from torch.utils.data import Dataset
 from torchvision.io import read_image
+import yaml
 
 
 class CustomImageDataset(Dataset):
@@ -20,9 +21,10 @@ class CustomImageDataset(Dataset):
         img_path = os.path.join(self.path, self.img_name[idx])
         image = read_image(img_path)
         label = self.img_labels.iloc[idx]
+        label_map = yaml.safe_load(open('./data/processed/labels_map.yaml'))
         if self.transform:
             image = self.transform(image)
         if self.target_transform:
             label = self.target_transform(label)
-        return image, label
+        return image, label_map[label]
 
